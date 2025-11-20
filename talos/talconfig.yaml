@@ -21,7 +21,7 @@ nodes:
   - hostname: "metal0"
     ipAddress: "192.168.1.110"
     installDiskSelector:
-      serial: "nvme0n1"
+      serial: "191034802214"
     machineSpec:
       secureboot: false
     talosImageURL: factory.talos.dev/installer/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba
@@ -41,7 +41,7 @@ nodes:
   - hostname: "metal1"
     ipAddress: "192.168.1.111"
     installDiskSelector:
-      serial: "nvme0n1"
+      serial: "191045803121"
     machineSpec:
       secureboot: false
     talosImageURL: factory.talos.dev/installer/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba
