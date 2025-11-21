@@ -45,7 +45,7 @@ spec:
       app:
         hostnames: ["draw.${SECRET_DOMAIN}"]
         parentRefs:
-          - name: enviy-internal
+          - name: envoy-internal
             namespace: network
             sectionName: https
         rules:
