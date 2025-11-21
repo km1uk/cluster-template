@@ -45,8 +45,8 @@ spec:
       app:
         hostnames: ["draw.${SECRET_DOMAIN}"]
         parentRefs:
-          - name: internal
-            namespace: kube-system
+          - name: enviy-internal
+            namespace: network
             sectionName: https
         rules:
           - backendRefs:
