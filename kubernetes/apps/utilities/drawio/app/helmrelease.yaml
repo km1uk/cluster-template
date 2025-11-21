@@ -1,0 +1,54 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app drawio
+  namespace: utilities
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: drawio
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  values:
+    controllers:
+      drawio:
+        strategy: RollingUpdate
+        containers:
+          app:
+            image:
+              repository: jgraph/drawio
+              tag: 28.2.0
+            env:
+              LETS_ENCRYPT_ENABLED: "false"
+              PUBLIC_DNS: "draw.${SECRET_DOMAIN}"
+              DRAWIO_BASE_URL: "https://draw.${SECRET_DOMAIN}"
+              DRAWIO_SERVER_URL: "https://draw.${SECRET_DOMAIN}"
+              DRAWIO_VIEWER_URL: "https://draw.${SECRET_DOMAIN}/js/viewer.min.js"
+              DRAWIO_LIGHTBOX_URL: "https://draw.${SECRET_DOMAIN}/."
+    service:
+      app:
+        controller: drawio
+        ports:
+          http:
+            port: 8080
+          https:
+            port: 8443
+    route:
+      app:
+        hostnames: ["draw.${SECRET_DOMAIN}"]
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: 8080
