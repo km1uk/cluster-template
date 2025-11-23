@@ -31,6 +31,7 @@ spec:
       name: synology-csi-client-info
     storageClasses:
       synology-csi-delete:
+        reclaimPolicy: Delete
         parameters:
           dsm: 192.168.1.4
           fsType: ext4
@@ -38,6 +39,7 @@ spec:
           protocol: iscsi
       synology-csi-retain:
         isDefault: true
+        reclaimPolicy: Retain
         parameters:
           dsm: 192.168.1.4
           fsType: ext4
