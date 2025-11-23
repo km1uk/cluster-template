@@ -4,7 +4,7 @@ apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
   name: synology-csi-chart
-  namespace: synology-csi
+  namespace: flux-system
 spec:
   interval: 1h
   url: https://christian-schlichtherle.github.io/synology-csi-chart
