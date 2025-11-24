@@ -26,9 +26,6 @@ spec:
       retries: 3
   uninstall:
     keepHistory: false
-  dependsOn:
-    - name: synology-csi
-      namespace: synology-csi
   values:
     crds:
       enabled: true
