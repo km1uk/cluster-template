@@ -1,0 +1,6 @@
+clients:
+- host: 192.168.1.4
+  port: 5000
+  https: false
+  username: kubernetes
+  password: ZKX8ff
