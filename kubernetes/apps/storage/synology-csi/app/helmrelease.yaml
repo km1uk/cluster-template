@@ -34,7 +34,7 @@ spec:
         reclaimPolicy: Delete
         parameters:
           dsm: 192.168.1.4
-          fsType: ext4
+          fsType: btrfs
           location: /volume2
           protocol: iscsi
       synology-csi-retain:
@@ -42,6 +42,6 @@ spec:
         reclaimPolicy: Retain
         parameters:
           dsm: 192.168.1.4
-          fsType: ext4
+          fsType: btrfs
           location: /volume2
           protocol: iscsi
