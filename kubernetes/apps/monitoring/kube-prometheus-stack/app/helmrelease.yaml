@@ -1,0 +1,110 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app kube-prometheus-stack
+  namespace: monitoring
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: kube-prometheus-stack
+      version: 77.6.2
+      sourceRef:
+        kind: HelmRepository
+        name: prometheus-community
+        namespace: monitoring
+  install:
+    crds: CreateReplace
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    crds: CreateReplace
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  dependsOn:
+    - name: synology-csi
+      namespace: synology-csi
+  values:
+    crds:
+      enabled: true
+    cleanPrometheusOperatorObjectNames: true
+    alertmanager:
+      enabled: false
+    kubelet:
+      enabled: true
+    kubeApiServer:
+      enabled: true
+    kubeControllerManager:
+      enabled: true
+      endpoints: &endpoints
+        - "10.0.90.10"
+        - "10.0.90.12"
+        - "10.0.90.12"
+    coreDns:
+      enabled: true
+    kubeEtcd:
+      enabled: true
+      endpoints: *endpoints
+    kubeScheduler:
+      enabled: true
+      endpoints: *endpoints
+    kubeProxy:
+      enabled: false # Disabled due to eBPF
+    kubeStateMetrics:
+      enabled: true
+    kube-state-metrics:
+      prometheus:
+        monitor:
+          enabled: true
+          relabelings:
+            - action: replace
+              sourceLabels: ["__meta_kubernetes_pod_node_name"]
+              regex: ^(.*)$
+              separator: ;
+              replacement: $1
+              targetLabel: nodename
+    nodeExporter:
+      enabled: true
+    prometheus-node-exporter:
+      namespaceOverride: "monitoring"
+    prometheus:
+      enabled: true
+      ingress:
+        enabled: false
+      route:
+        main:
+          enabled: true
+          hostnames: ["prometheus.${SECRET_DOMAIN}"]
+          parentRefs:
+            - name: internal
+              namespace: kube-system
+              sectionName: https
+      prometheusSpec:
+        ruleSelectorNilUsesHelmValues: false
+        serviceMonitorSelectorNilUsesHelmValues: false
+        podMonitorSelectorNilUsesHelmValues: false
+        probeSelectorNilUsesHelmValues: false
+        scrapeConfigSelectorNilUsesHelmValues: false
+        enableAdminAPI: true
+        walCompression: true
+        retentionSize: 8GB
+        storageSpec:
+          volumeClaimTemplate:
+            spec:
+              storageClassName: synology-csi-retain
+              resources:
+                requests:
+                  storage: 10Gi
+    grafana:
+      enabled: false
+      forceDeployDashboards: true
+      sidecar:
+        dashboards:
+          multicluster:
+            etcd:
+              enabled: true
