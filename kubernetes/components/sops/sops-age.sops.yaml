@@ -2,21 +2,22 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: sops-age
+  namespace: flux-system
 stringData:
-  SECRET_DOMAIN: ENC[AES256_GCM,data:yc8IQkm7QL9Hyw==,iv:JnDCNsq65obWWlqe7KaqIxsMTMrNINPUSHcwIDrZmGA=,tag:KzEb37iitfmw7yuttOG0Dw==,type:str]
+  age.agekey: ENC[AES256_GCM,data:I8SaGdq0aDiN80SdK8Jz1SwrpyqTtNJKpg/2gl8XWnO7XPrZHFqBv2xi/RxLBhegB4jLh7qeiRuztxpi87SFCNpRFJNCKof+juM=,iv:kEVih/hw1LwqaCGcgavJ5MMOOu8EzMSZkfLVZL4LziQ=,tag:ok6GCbuozZNuDNyYoRIrhA==,type:str]
 sops:
   age:
     - recipient: age12xg36efrledrxuh7722kwr2973tvp0yzhay4cnfhanzwq4m89g6s63r90a
       enc: |
         -----BEGIN AGE ENCRYPTED FILE-----
-        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBRSjk4T2xPaEIvS0VLS0Vv
-        Z3pUZzZEUDJURlcrZVJrWkJ0QlkrNkFvbm0wCkZLZnpCa3ByRmxCY1VYeTNFRVJj
-        Rm1WdDRINC9rK2dpYWloQU5TbEYwNEUKLS0tIGtyQmFxdFpHUFh5ZFVVSkxSaDd4
-        a2dvL2xXdWEvUGFmZmlFQ1Z6YloxVUkK/Wp0tYmFaSwW8IAtFgsg5alylOncdItb
-        bcCEh1GlnXw5/ZokpATn6sQvtLlrevJA6RC5uZVkipm6qFlNlZSCPQ==
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA3Tm81c1cwck5uY3BNQzhJ
+        SE1IWUNEZE1Lc0dROGI1VFV6YmJYRitNdW40CnVtQ0VMM2hiQXM4UjVhRmdDaFNR
+        NzMwcHJVWEJMeEhzS1ZRcHJBb3ViSncKLS0tIGo0aE55bC9NTnQyQjFQZnJqNElK
+        UzVoRFRweWJLcnJKdWNLdlAyZDRZancKQheKNCWj4OYSh3+8xamkF9druMKaKS9b
+        czvcy8jtHjjo636VaToKY3sB4AohwhgVRJe1Q++X2oekgLF7vaW0Kg==
         -----END AGE ENCRYPTED FILE-----
   lastmodified: "2025-11-20T11:31:30Z"
-  mac: ENC[AES256_GCM,data:URLQkgwZkMY4oEJCWfSvKeab7zIdHYDsvGGVafv/+9jm/NkLTSeKzzTVMhsXzUHVMwt+ixEY2vUov55DjiViUHClWMctXzbhanD+g7wsbbPiJ2LGRA/Hlom0xHfoje9gJEnLaj7aaotVJF6GglZN8G9XV/yVRJhF+q1YdmnxFxM=,iv:jyDotte1LlcS0I699n4X5/htu3wZQ30y8ovoOs3vF8E=,tag:c95orRjZghcFdOOQurZ5+w==,type:str]
+  mac: ENC[AES256_GCM,data:3LQJfPvdQqUaNSu9U2Mk4B748DWrygVBML6ON5v34M78dgLDiC8FyuQ7WLAlN5v+QkXjfwto4iiR6HPk0m40HsZjr/fg57VVtEw4gtAPJrmXQk0jHzS/PsN2hAcejx0jQV6zw2tZS66Cs3ufyatUSShV1fcjA7TtIaoKKBquVAc=,iv:V7/AEqyi7btSGS4NYrk6ZygZlo9pxzoBHpL555CVAAQ=,tag:9y4XBar5QJYauf8AtUBH9g==,type:str]
   encrypted_regex: ^(data|stringData)$
   mac_only_encrypted: true
   version: 3.11.0
