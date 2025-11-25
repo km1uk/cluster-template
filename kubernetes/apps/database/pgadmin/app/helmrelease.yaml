@@ -75,7 +75,7 @@ spec:
             port: *port
     route:
       app:
-          hostnames: ["pgadmin.${SECRET_DOMAIN}"]
+        hostnames: ["pgadmin.${SECRET_DOMAIN}"]
         parentRefs:
           - name: envoy-external
             namespace: network
