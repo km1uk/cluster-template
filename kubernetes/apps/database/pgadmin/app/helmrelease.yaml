@@ -73,27 +73,17 @@ spec:
         ports:
           http:
             port: *port
-    ingress:
+    route:
       app:
-        enabled: true
-        className: internal
-        annotations:
-          ## Enable Oauth2 Authentication
-          #nginx.ingress.kubernetes.io/auth-url: "http://oauth2-proxy.security.svc.cluster.local:4180/oauth2/auth"
-          #nginx.ingress.kubernetes.io/auth-signin: "https://auth.${SECRET_DOMAIN}/oauth2/auth/oauth2/start?rd=$scheme://$host$request_uri"
-          ##
-          gethomepage.dev/enabled: "true"
-          gethomepage.dev/group: Database
-          gethomepage.dev/name: pgAdmin
-          gethomepage.dev/description: "Web-based administration for PostgreSQL"
-          gethomepage.dev/icon: si-postgresql
-        hosts:
-          - host: "{{ .Release.Name }}.${SECRET_DOMAIN}"
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
+        hostnames: ["{{ .Release.Name }}.${SECRET_DOMAIN}"]
+        parentRefs:
+          - name: envoy-external
+            namespace: network
+            sectionName: https
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: 80
     persistence:
       config:
         storageClass: synology-csi-delete
