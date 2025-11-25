@@ -13,6 +13,10 @@ spec:
   dependsOn:
     - name: cloudnative-pg
   path: ./kubernetes/apps/database/pgadmin/app
+  postBuild:
+    substituteFrom:
+      - name: cluster-secrets
+        kind: Secret
   prune: true
   sourceRef:
     kind: GitRepository
