@@ -1,0 +1,28 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.ok8.sh/postgresql.cnpg.io/cluster_v1.json
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: postgres
+  namespace: database
+spec:
+  instances: 1
+  imageName: ghcr.io/ahinko/postgres-extended:16.4.47
+  primaryUpdateStrategy: unsupervised
+  storage:
+    size: 20Gi
+    storageClass: synology-csi-delete
+  superuserSecret:
+    name: postgres-superuser
+  enableSuperuserAccess: true
+  postgresql:
+    shared_preload_libraries:
+      - "vectors.so"
+    parameters:
+      max_connections: "600"
+      shared_buffers: 512MB
+  monitoring:
+    enablePodMonitor: true
+  affinity:
+    nodeSelector:
+      beta.kubernetes.io/arch: amd64
