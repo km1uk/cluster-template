@@ -6,5 +6,4 @@ namespace: database
 resources:
   - ./cluster.yaml
   - ./prometheus-rule.yaml
-  - ./secret.sops.yaml
   - ./service.yaml
