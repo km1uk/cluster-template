@@ -7,3 +7,4 @@ components:
   - ../../components/sops
 resources:
   - ./drawio/ks.yaml
+  - ./vikunja/ks.yaml
