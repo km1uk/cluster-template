@@ -78,8 +78,8 @@ spec:
       app:
         hostnames: ["vikunja.${SECRET_DOMAIN}"]
         parentRefs:
-          - name: internal
-            namespace: kube-system
+          - name: envoy-external
+            namespace: network
             sectionName: https
         rules:
           - backendRefs:
