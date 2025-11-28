@@ -28,6 +28,8 @@ spec:
     - name: onepassword-connect
       namespace: security
   values:
+    image:
+      repository: bitnamilegacy/redis
     architecture: standalone
     commonAnnotations:
       secret.reloader.stakater.com/reload: "redis-external-secret"
