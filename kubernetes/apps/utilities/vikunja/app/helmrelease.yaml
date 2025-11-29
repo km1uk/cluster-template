@@ -28,7 +28,7 @@ spec:
         strategy: RollingUpdate
         annotations:
           reloader.stakater.com/auto: "true"
-          secret.reloader.stakater.com/reload: &secret vikunja-external-secret
+          secret.reloader.stakater.com/reload: vikunja-external-secret
           configmap.reloader.stakater.com/reload: vikunja-configmap
         initContainers:
           01-check-db-ready:
@@ -37,7 +37,7 @@ spec:
               tag: 17.6
             envFrom:
               - secretRef:
-                  name: *secret
+                  name: &secret vikunja-external-secret
             command: ['sh', '-c',
               'until pg_isready -h ${INIT_POSTGRES_HOST} -p 5432;
               do echo Waiting for PostgreSQL database; sleep 5; done;']
