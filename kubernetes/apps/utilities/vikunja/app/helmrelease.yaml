@@ -39,9 +39,9 @@ spec:
               - secretRef:
                   name: vikunja-external-secret
             command: ['sh', '-c',
-              'if [ -z "${INIT_POSTGRES_HOST}" ]; then echo "ERROR: INIT_POSTGRES_HOST is not set"; exit 1; fi;
-              until pg_isready -h "${INIT_POSTGRES_HOST}" -p 5432;
-              do echo Waiting for PostgreSQL database at ${INIT_POSTGRES_HOST}; sleep 5; done;']
+              'if [ -z "$${INIT_POSTGRES_HOST}" ]; then echo "ERROR: INIT_POSTGRES_HOST is not set"; exit 1; fi;
+              until pg_isready -h "$${INIT_POSTGRES_HOST}" -p 5432;
+              do echo Waiting for PostgreSQL database at $${INIT_POSTGRES_HOST}; sleep 5; done;']
           02-initdb:
             image:
               repository: ghcr.io/home-operations/postgres-init
