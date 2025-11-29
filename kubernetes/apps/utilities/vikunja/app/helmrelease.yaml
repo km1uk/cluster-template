@@ -34,9 +34,12 @@ spec:
           01-check-db-ready:
             image:
               repository: postgres
-              tag: 18.1
+              tag: 17.6
+            envFrom:
+              - secretRef:
+                  name: *secret
             command: ['sh', '-c',
-              'until pg_isready -h ${POSTGRESQL_HOST_INTERNAL} -p 5432;
+              'until pg_isready -h ${INIT_POSTGRES_HOST} -p 5432;
               do echo Waiting for PostgreSQL database; sleep 5; done;']
           02-initdb:
             image:
@@ -53,7 +56,7 @@ spec:
               pullPolicy: IfNotPresent
             envFrom:
               - secretRef:
-                  name: vikunja-external-secret
+                  name: *secret
             env:
               VIKUNJA_SERVICE_TIMEZONE: "${TIMEZONE}"
               VIKUNJA_SERVICE_PUBLICURL: "https://vikunja.${SECRET_DOMAIN}/"
