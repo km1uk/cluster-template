@@ -37,7 +37,7 @@ spec:
               tag: 17.6
             envFrom:
               - secretRef:
-                  name: *secret
+                  name: vikunja-external-secret
             command: ['sh', '-c',
               'if [ -z "${INIT_POSTGRES_HOST}" ]; then echo "ERROR: INIT_POSTGRES_HOST is not set"; exit 1; fi;
               until pg_isready -h "${INIT_POSTGRES_HOST}" -p 5432;
@@ -48,7 +48,7 @@ spec:
               tag: 18.1
             envFrom:
               - secretRef:
-                  name: *secret
+                  name: vikunja-external-secret
         containers:
           app:
             image:
@@ -57,7 +57,7 @@ spec:
               pullPolicy: IfNotPresent
             envFrom:
               - secretRef:
-                  name: *secret
+                  name: vikunja-external-secret
             env:
               VIKUNJA_SERVICE_TIMEZONE: "${TIMEZONE}"
               VIKUNJA_SERVICE_PUBLICURL: "https://vikunja.${SECRET_DOMAIN}/"
