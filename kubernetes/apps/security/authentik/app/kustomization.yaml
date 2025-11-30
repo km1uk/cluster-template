@@ -2,10 +2,7 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: security
-components:
-  - ../../components/sops
 resources:
-  - ./external-secrets/ks.yaml
-  - ./authentik/ks.yaml
-  - ./namespace.yaml
+  - ./helmrepository.yaml
+  - ./helmrelease.yaml
+  - ./authentik-external-secret.yaml

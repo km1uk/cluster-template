@@ -1,0 +1,100 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app authentik
+  namespace: security
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: authentik
+      version: 2025.8.1
+      sourceRef:
+        kind: HelmRepository
+        name: authentik
+        namespace: security
+      interval: 15m
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  dependsOn:
+    - name: onepassword-connect
+      namespace: security
+    - name: cloudnative-pg
+      namespace: databases
+    - name: redis
+      namespace: databases
+  values:
+    controller:
+      annotations:
+        secret.reloader.stakater.com/reload: &secret authentik-external-secret
+    worker:
+      replicas: 1
+      envFrom:
+        - secretRef:
+            name: *secret
+    server:
+      replicas: 1
+      initContainers:
+        - name: 01-check-db-ready
+          image: postgres:18.1
+          command: ['sh', '-c',
+              'until pg_isready -h ${POSTGRESQL_HOST_INTERNAL} -p 5432;
+              do echo Waiting for PostgreSQL database; sleep 5; done;']
+        - name: 02-initdb
+          image: ghcr.io/home-operations/postgres-init:18.1
+          envFrom:
+            - secretRef:
+                name: *secret
+      envFrom:
+        - secretRef:
+            name: *secret
+      # ingress:
+      #   enabled: true
+      #   ingressClassName: external
+      #   annotations:
+      #     external-dns.alpha.kubernetes.io/target: "external.${SECRET_DOMAIN}"
+      #   hosts:
+      #     - &host "auth.${SECRET_DOMAIN}"
+      #   paths:
+      #     - /
+      #   pathType: Prefix
+      #   tls:
+      #     - secretName: *host
+      #       hosts:
+      #         - *host
+      route:
+        main:
+          enabled: true
+          hostnames: ["auth.${SECRET_DOMAIN}"]
+          parentRefs:
+          - name: external
+            namespace: kube-system
+            sectionName: https
+    authentik:
+      email:
+        host: "smtp.gmail.com"
+        use_tls: true
+        port: "587"
+        from: "Authentik <authentik@${SECRET_DOMAIN}>"
+      log_level: info
+      outposts:
+        container_image_base: ghcr.io/goauthentik/%(type)s:%(version)s
+      error_reporting:
+        enabled: false
+    prometheus:
+      rules:
+        enabled: true
+    postgresql:
+      enabled: false
+    redis:
+      enabled: false
+    geoip:
+      enabled: false
