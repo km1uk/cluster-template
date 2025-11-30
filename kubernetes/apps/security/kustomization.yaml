@@ -7,4 +7,5 @@ components:
   - ../../components/sops
 resources:
   - ./external-secrets/ks.yaml
+  - ./authentik/ks.yaml
   - ./namespace.yaml
