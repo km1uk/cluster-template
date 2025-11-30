@@ -28,9 +28,9 @@ spec:
     - name: onepassword-connect
       namespace: security
     - name: cloudnative-pg
-      namespace: databases
+      namespace: database
     - name: redis
-      namespace: databases
+      namespace: database
   values:
     controller:
       annotations:
@@ -75,8 +75,8 @@ spec:
           enabled: true
           hostnames: ["auth.${SECRET_DOMAIN}"]
           parentRefs:
-          - name: external
-            namespace: kube-system
+          - name: envoy-external
+            namespace: network
             sectionName: https
     authentik:
       email:
