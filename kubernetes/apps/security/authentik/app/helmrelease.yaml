@@ -74,13 +74,17 @@ spec:
       #       hosts:
       #         - *host
       route:
-        main:
+        app:
           enabled: true
           hostnames: ["auth.${SECRET_DOMAIN}"]
           parentRefs:
-          - name: envoy-external
-            namespace: network
-            sectionName: https
+            - name: envoy-external
+              namespace: network
+              sectionName: https
+          rules:
+            - backendRefs:
+              - identifier: app
+                port: 9443
     authentik:
       email:
         host: "smtp.gmail.com"
