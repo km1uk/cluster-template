@@ -18,15 +18,15 @@ spec:
         config.yaml: |-
           auth:
             local:
+              enabled: false
+            openid:
               enabled: true
-            #openid:
-            #  enabled: true
-            #  providers:
-            #    - name: "Authentik"
-            #      authurl: https://auth.{{ .HOMELAB_SECRET_DOMAIN }}/application/o/vikunja/
-            #      clientid: {{ .VIKUNJA_OIDC_CLIENT_ID }}
-            #      clientsecret: {{ .VIKUNJA_CLIENT_SECRET }}
-            #      scope: openid email profile
+              providers:
+                - name: "Authentik"
+                  authurl: https://auth.{{ .HOMELAB_SECRET_DOMAIN }}/application/o/vikunja/
+                  clientid: {{ .VIKUNJA_OIDC_CLIENT_ID }}
+                  clientsecret: {{ .VIKUNJA_CLIENT_SECRET }}
+                  scope: openid email profile
   dataFrom:
     - extract:
         key: homelab-external-secret
