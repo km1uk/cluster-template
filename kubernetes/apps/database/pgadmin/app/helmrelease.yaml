@@ -17,6 +17,9 @@ spec:
     remediation:
       strategy: rollback
       retries: 3
+  dependsOn:
+    - name: onepassword-connect
+      namespace: security
   values:
     controllers:
       pgadmin:
@@ -31,16 +34,9 @@ spec:
               PGADMIN_CONFIG_ENHANCED_COOKIE_PROTECTION: "False"
               PGADMIN_DISABLE_POSTFIX: "true"
               PGADMIN_LISTEN_PORT: &port 80
-              PGADMIN_DEFAULT_EMAIL:
-                valueFrom:
-                  secretKeyRef:
-                    name: pgadmin-secret
-                    key: PGADMIN_DEFAULT_EMAIL
-              PGADMIN_DEFAULT_PASSWORD:
-                valueFrom:
-                  secretKeyRef:
-                    name: pgadmin-secret
-                    key: PGADMIN_DEFAULT_PASSWORD
+            envFrom:
+              - secretRef:
+                  name: pgadmin-external-secret
             probes:
               liveness: &probes
                 enabled: true
@@ -97,3 +93,13 @@ spec:
         globalMounts:
           - path: /pgadmin4/servers.json
             subPath: servers.json
+      passwd:
+        enabled: true
+        type: secret
+        name: pgadmin-oidc-config
+        advancedMounts:
+          pgadmin:
+            app:
+              - path: /pgadmin4/config_local.py
+                subPath: config_local.py
+                readOnly: true
