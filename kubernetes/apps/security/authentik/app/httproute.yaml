@@ -16,6 +16,6 @@ spec:
   rules:
     - backendRefs:
         - name: authentik-server
-          port: 9443
+          port: 9000
           weight: 1
 
