@@ -2,10 +2,7 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: utilities
-components:
-  - ../../components/sops
 resources:
-  - ./drawio/ks.yaml
-  - ./vikunja/ks.yaml
-  - ./outline/ks.yaml
+  - ./ocirepository.yaml
+  - ./helmrelease.yaml
+  - ./outline-external-secret.yaml
