@@ -1,0 +1,101 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app outline
+  namespace: utilities
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: outline
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  dependsOn:
+    - name: cloudnative-pg
+      namespace: database
+    - name: redis
+      namespace: database
+    - name: onepassword-connect
+      namespace: security
+  values:
+    controllers:
+      outline:
+        strategy: RollingUpdate
+        annotations:
+          secret.reloader.stakater.com/reload: &secret outline-external-secret
+        initContainers:
+          01-check-db-ready:
+            image:
+              repository: postgres
+              tag: 18.1
+            command: ['sh', '-c',
+              'until pg_isready -h ${POSTGRESQL_HOST_INTERNAL} -p 5432;
+              do echo Waiting for PostgreSQL database; sleep 5; done;']
+          02-initdb:
+            image:
+              repository: ghcr.io/home-operations/postgres-init
+              tag: 18.1
+            envFrom:
+              - secretRef:
+                  name: *secret
+        containers:
+          app:
+            image:
+              repository: outlinewiki/outline
+              tag: 0.87.3
+              pullPolicy: IfNotPresent
+            env:
+              NODE_ENV: "production"
+              FILE_STORAGE: "local"
+              FILE_STORAGE_LOCAL_ROOT_DIR: "/var/lib/outline/data"
+              FILE_STORAGE_UPLOAD_MAX_SIZE: 104857600
+              FILE_STORAGE_IMPORT_MAX_SIZE: 104857600
+              FILE_STORAGE_WORKSPACE_IMPORT_MAX_SIZE: 104857600
+              LOG_LEVEL: "info"
+              DEFAULT_LANGUAGE: "en_US"
+              RATE_LIMITER_ENABLED: "true"
+              RATE_LIMITER_REQUESTS: 1000
+              RATE_LIMITER_DURATION_WINDOW: 60
+              WEB_CONCURRENCY: 1
+              ENABLE_UPDATES: "false"
+              PORT: &port 3000
+            envFrom:
+              - secretRef:
+                  name: outline-external-secret
+    service:
+      app:
+        controller: outline
+        ports:
+          http:
+            port: *port
+    route:
+      app:
+        hostnames: ["outline.${SECRET_DOMAIN}"]
+        parentRefs:
+          - name: envoy-external
+            namespace: network
+            sectionName: https
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: *port
+    persistence:
+      data:
+        enabled: true
+        storageClass: synology-csi-retain
+        accessMode: ReadWriteOnce
+        type: persistentVolumeClaim
+        size: 10Gi
+        retain: true
+        advancedMounts:
+          outline:
+            app:
+              - path: /var/lib/outline/data
+                readOnly: false
