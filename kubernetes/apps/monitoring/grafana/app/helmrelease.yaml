@@ -30,8 +30,6 @@ spec:
       namespace: security
     - name: cloudnative-pg
       namespace: database
-    - name: synology-csi
-      namespace: storage
   values:
     deploymentStrategy:
       type: Recreate
