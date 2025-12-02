@@ -26,13 +26,11 @@ spec:
   uninstall:
     keepHistory: false
   dependsOn:
-    - name: openebs
-      namespace: openebs-system
     - name: onepassword-connect
       namespace: security
     - name: cloudnative-pg
-      namespace: databases
-    - name: csi-driver-nfs
+      namespace: database
+    - name: synology-csi-retain
       namespace: storage
   values:
     deploymentStrategy:
@@ -179,13 +177,13 @@ spec:
         enabled: true
         hostnames: ["grafana.${SECRET_DOMAIN}"]
         parentRefs:
-          - name: internal
-            namespace: kube-system
+          - name: envoy-external
+            namespace: network
             sectionName: https
     persistence:
       enabled: true
       type: pvc
-      storageClassName: nfs-csi
+      storageClassName: synology-csi
       accessModes:
         - ReadWriteOnce
       size: 10Gi
