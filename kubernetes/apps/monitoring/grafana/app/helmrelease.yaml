@@ -183,7 +183,7 @@ spec:
     persistence:
       enabled: true
       type: pvc
-      storageClassName: synology-csi
+      storageClassName: synology-csi-retain
       accessModes:
         - ReadWriteOnce
       size: 10Gi
