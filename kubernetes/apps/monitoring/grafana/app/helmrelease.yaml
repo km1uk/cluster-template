@@ -31,6 +31,15 @@ spec:
     - name: cloudnative-pg
       namespace: database
   values:
+    annotations:
+      configmap.reloader.stakater.com/reload: grafana
+      secret.reloader.stakater.com/reload: grafana-external-secret
+    extraInitContainers:
+      - name: 01-init-db
+        image: ghcr.io/onedr0p/postgres-init:18.1
+        envFrom:
+          - secretRef:
+              name: grafana-external-secret
     deploymentStrategy:
       type: Recreate
     admin:
