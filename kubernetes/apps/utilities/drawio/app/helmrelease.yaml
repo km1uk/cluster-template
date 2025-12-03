@@ -33,6 +33,29 @@ spec:
               DRAWIO_SERVER_URL: "https://draw.${SECRET_DOMAIN}"
               DRAWIO_VIEWER_URL: "https://draw.${SECRET_DOMAIN}/js/viewer.min.js"
               DRAWIO_LIGHTBOX_URL: "https://draw.${SECRET_DOMAIN}/."
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /
+                    port: 8080
+                  initialDelaySeconds: 30
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 3
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /
+                    port: 8080
+                  initialDelaySeconds: 10
+                  periodSeconds: 5
+                  timeoutSeconds: 3
+                  failureThreshold: 3
     service:
       app:
         controller: drawio
@@ -49,6 +72,10 @@ spec:
             namespace: network
             sectionName: https
         rules:
-          - backendRefs:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
               - identifier: app
                 port: 8080
