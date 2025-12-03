@@ -10,6 +10,7 @@
       "SSLMode": "prefer",
       "SSLCompression": 0,
       "Shared": true,
+      "SharedUsername": "postgres",
       "Timeout": 10,
       "UseSSHTunnel": 0,
       "TunnelAuthentication": 0
