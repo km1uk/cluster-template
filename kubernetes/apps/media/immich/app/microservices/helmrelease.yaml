@@ -63,6 +63,10 @@ spec:
         type: nfs
         server: 192.168.1.4
         path: /volume2/photo
+        advancedMounts:
+          immich-server:
+            app:
+              - readOnly: true
       library:
         enabled: true
         existingClaim: immich-nfs
