@@ -11,7 +11,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   nfs:
     server: 192.168.1.4
-    path: /volume2/photos
+    path: /volume2/photo
   mountOptions: ["nfsvers=4.1", "nconnect=8", "hard", "noatime"]
 ---
 apiVersion: v1
