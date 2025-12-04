@@ -27,7 +27,7 @@ spec:
     - name: onepassword-connect
       namespace: security
     - name: synology-csi
-      namespace: storage
+      namespace: synology-csi
   values:
     controllers:
       immich-machine-learning:
