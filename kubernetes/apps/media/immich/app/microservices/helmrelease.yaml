@@ -24,7 +24,7 @@ spec:
       namespace: database
     - name: onepassword-connect
       namespace: security
-    - name: synology-csi-nfs
+    - name: synology-csi
       namespace: storage
   values:
     controllers:
