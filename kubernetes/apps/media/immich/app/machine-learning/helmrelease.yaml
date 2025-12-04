@@ -21,12 +21,12 @@ spec:
     - name: immich-server
       namespace: media
     - name: redis
-      namespace: databases
+      namespace: database
     - name: cloudnative-pg
       namespace: database
     - name: onepassword-connect
       namespace: security
-    - name: csi-driver-nfs
+    - name: synology-csi
       namespace: storage
   values:
     controllers:
