@@ -24,7 +24,7 @@ spec:
       namespace: database
     - name: onepassword-connect
       namespace: security
-    - name: csi-driver-nfs
+    - name: synology-csi-nfs
       namespace: storage
   values:
     controllers:
@@ -102,7 +102,7 @@ spec:
         enabled: true
         accessMode: ReadWriteOnce
         size: 1Gi
-        storageClass: synology-csi-nfs
+        storageClass: synology-csi-delete
         advancedMounts:
           immich-server:
             app:
