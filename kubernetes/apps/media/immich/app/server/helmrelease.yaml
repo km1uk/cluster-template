@@ -1,0 +1,115 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app immich-server
+  namespace: media
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: immich
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  dependsOn:
+    - name: redis
+      namespace: database
+    - name: cloudnative-pg
+      namespace: database
+    - name: onepassword-connect
+      namespace: security
+    - name: synology-csi
+      namespace: synology-csi
+  values:
+    controllers:
+      immich-server:
+        strategy: RollingUpdate
+        annotations:
+          secret.reloader.stakater.com/reload: &secret immich-external-secret
+        pod:
+          topologySpreadConstraints:
+            - maxSkew: 1
+              topologyKey: kubernetes.io/hostname
+              whenUnsatisfiable: DoNotSchedule
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: *app
+        initContainers:
+          01-check-db-ready:
+            image:
+              repository: postgres
+              tag: 18.1
+            command: ['sh', '-c',
+              'until pg_isready -h "$${POSTGRESQL_IMMICH_HOST_INTERNAL}" -p 5432;
+              do echo Waiting for PostgreSQL database; sleep 5; done;']
+          02-initdb:
+            image:
+              repository: ghcr.io/home-operations/postgres-init
+              tag: 18.1
+            envFrom:
+              - secretRef:
+                  name: *secret
+        containers:
+          app:
+            image:
+              repository: ghcr.io/immich-app/immich-server
+              tag: v1.142.0
+            env:
+              IMMICH_WORKERS_INCLUDE: 'api'
+            envFrom:
+              - secretRef:
+                  name: *secret
+            resources:
+              requests:
+                cpu: 50m
+                memory: 128M
+              limits:
+                cpu: 250m
+                memory: 512M
+    service:
+      app:
+        controller: immich-server
+        ports:
+          http:
+            port: &port 2283
+    route:
+      app:
+        hostnames: ["photos.${SECRET_DOMAIN}"]
+        parentRefs:
+          - name: envoy-external
+            namespace: network
+            sectionName: https
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: *port
+    persistence:
+      external:
+        enabled: true
+        type: nfs
+        server: 192.168.1.4
+        path: /volume2/photo
+      library:
+        enabled: true
+        existingClaim: immich-nfs
+        advancedMounts:
+          immich-server:
+            app:
+              - path: /usr/src/app/upload
+                readOnly: false
+      config:
+        enabled: true
+        accessMode: ReadWriteOnce
+        size: 1Gi
+        storageClass: synology-csi-delete
+        advancedMounts:
+          immich-server:
+            app:
+              - path: /config
+                readOnly: false
