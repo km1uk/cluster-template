@@ -65,9 +65,10 @@ spec:
             port: 3003
     persistence:
       external:
-        enabled: true
-        existingClaim: photo-nfs
-        readOnly: true
+        external:
+          enabled: true
+          existingClaim: photo-nfs
+          readOnly: true
       library:
         enabled: true
         existingClaim: immich-nfs
