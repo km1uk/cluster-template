@@ -94,7 +94,7 @@ spec:
         enabled: true
         existingClaim: photo-nfs
         readOnly: true
-        type: pvc
+        type: persistentVolumeClaim
       library:
         enabled: true
         existingClaim: immich-nfs
