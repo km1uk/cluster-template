@@ -92,9 +92,9 @@ spec:
     persistence:
       external:
         enabled: true
-        existingClaim: photo-nfs
-        readOnly: true
-        type: persistentVolumeClaim
+        type: nfs
+        server: 192.168.1.4
+        path: /volume2/photo
       library:
         enabled: true
         existingClaim: immich-nfs
