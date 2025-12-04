@@ -50,14 +50,14 @@ spec:
               do echo Waiting for PostgreSQL database; sleep 5; done;']
             envFrom:
               - secretRef:
-                  name: *secret
+                  name: immich-external-secret
           02-initdb:
             image:
               repository: ghcr.io/home-operations/postgres-init
               tag: 18.1
             envFrom:
               - secretRef:
-                  name: *secret
+                  name: immich-external-secret
         containers:
           app:
             image:
