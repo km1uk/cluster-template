@@ -58,6 +58,10 @@ spec:
                 cpu: 500m
                 memory: 1G
     persistence:
+      external:
+        enabled: true
+        existingClaim: photo-nfs
+        readOnly: true
       library:
         enabled: true
         existingClaim: immich-nfs
