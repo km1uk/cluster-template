@@ -1,0 +1,102 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app n8n
+  namespace: automation
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: n8n
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  dependsOn:
+    - name: cloudnative-pg
+      namespace: database
+    - name: onepassword-connect
+      namespace: security
+  values:
+    controllers:
+      n8n:
+        strategy: RollingUpdate
+        annotations:
+          secret.reloader.stakater.com/reload: &secret n8n-external-secret
+        initContainers:
+          01-check-db-ready:
+            image:
+              repository: postgres
+              tag: 18.1
+            command: ['sh', '-c',
+              'until pg_isready -h "$${POSTGRESQL_HOST_INTERNAL}" -p 5432;
+              do echo Waiting for PostgreSQL database; sleep 5; done;']
+            envFrom:
+              - secretRef:
+                  name: n8n-external-secret
+          02-initdb:
+            image:
+              repository: ghcr.io/home-operations/postgres-init
+              tag: 18.1
+            envFrom:
+              - secretRef:
+                  name: n8n-external-secret
+          03-chown-data:
+            image:
+              repository: busybox
+              tag: latest
+            command: ["sh", "-c", "chown -R 1026:100 /home/node/.n8n && chmod -R 777 /home/node/.n8n"]
+            securityContext:
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop: ["all"]
+                add: ["CHOWN", "CHMOD"]
+              runAsUser: 0
+              runAsNonRoot: false
+        containers:
+          app:
+            image:
+              repository: n8nio/n8n
+              tag: 1.111.0
+            env:
+              GENERIC_TIMEZONE: "${TIMEZONE}"
+              EXECUTIONS_TIMEOUT: "600"
+              EXECUTIONS_TIMEOUT_MAX: "1800"
+              N8N_METRICS: "true"
+              N8N_LOG_LEVEL: "info"
+              N8N_PORT: &port "5678"
+            envFrom:
+              - secretRef:
+                  name: *secret
+    service:
+      app:
+        ports:
+          http:
+            port: *port
+    route:
+      app:
+        hostnames: ["{{ .Release.Name }}.${SECRET_DOMAIN}"]
+        parentRefs:
+          - name: envoy-external
+            namespace: network
+            sectionName: https
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: *port
+    persistence:
+      data:
+        enabled: true
+        storageClass: synology-csi-retain
+        accessMode: ReadWriteOnce
+        type: persistentVolumeClaim
+        retain: true
+        size: 20Gi
+        globalMounts:
+          - path: /home/node/.n8n
+            readOnly: false
