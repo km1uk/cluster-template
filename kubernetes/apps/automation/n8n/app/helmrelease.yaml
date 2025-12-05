@@ -46,18 +46,18 @@ spec:
             envFrom:
               - secretRef:
                   name: n8n-external-secret
-          #03-chown-data:
-          #  image:
-          #    repository: busybox
-          #    tag: latest
-          #  command: ["sh", "-c", "chown -R 1026:100 /home/node/.n8n && chmod -R 777 /home/node/.n8n"]
-          #  securityContext:
-          #    readOnlyRootFilesystem: true
-          #    capabilities:
-          #      drop: ["all"]
-          #      add: ["CHOWN", "CHMOD"]
-          #    runAsUser: 0
-          #    runAsNonRoot: false
+          03-chown-data:
+            image:
+              repository: busybox
+              tag: latest
+            command: ["sh", "-c", "chown -R 1000:1000 /home/node/.n8n && chmod -R 777 /home/node/.n8n"]
+            securityContext:
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop: ["all"]
+                add: ["CHOWN", "CHMOD"]
+              runAsUser: 0
+              runAsNonRoot: false
         containers:
           app:
             image:
