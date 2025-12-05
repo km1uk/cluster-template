@@ -70,6 +70,7 @@ spec:
               N8N_METRICS: "true"
               N8N_LOG_LEVEL: "info"
               N8N_PORT: &port "5678"
+              N8N_PROXY_HOPS: "1"
             envFrom:
               - secretRef:
                   name: *secret
