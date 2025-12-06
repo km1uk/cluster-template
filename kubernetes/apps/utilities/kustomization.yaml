@@ -9,3 +9,4 @@ resources:
   - ./drawio/ks.yaml
   - ./vikunja/ks.yaml
   - ./outline/ks.yaml
+  - ./grist/ks.yaml
