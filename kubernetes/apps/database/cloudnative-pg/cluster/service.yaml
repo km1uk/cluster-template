@@ -24,7 +24,7 @@ metadata:
   name: immich-db
   namespace: database
   annotations:
-    external-dns.alpha.kubernetes.io/hostname: immich-db-v17.${SECRET_DOMAIN}
+    external-dns.alpha.kubernetes.io/hostname: immich-db.${SECRET_DOMAIN}
 spec:
   type: LoadBalancer
   externalTrafficPolicy: Cluster
