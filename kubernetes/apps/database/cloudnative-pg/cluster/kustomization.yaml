@@ -7,3 +7,5 @@ resources:
   - ./cluster.yaml
   - ./prometheus-rule.yaml
   - ./service.yaml
+  - ./immich-db-external-secret.yaml
+  - ./immich-db.yaml
