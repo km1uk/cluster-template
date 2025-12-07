@@ -13,7 +13,7 @@ spec:
     size: 20Gi
     storageClass: synology-csi-delete
   superuserSecret:
-    name: postgresql-superuser-secret
+    name: postgresql-superuser
   postgresql:
     parameters:
       timezone: "Europe/London"
