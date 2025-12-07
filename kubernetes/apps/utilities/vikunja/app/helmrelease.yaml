@@ -63,7 +63,7 @@ spec:
               VIKUNJA_SERVICE_PUBLICURL: "https://vikunja.${SECRET_DOMAIN}/"
               VIKUNJA_SERVICE_ENABLEREGISTRATION: "false"
               VIKUNJA_SERVICE_ENABLEUSERDELETION: "false"
-              VIKUNJA_LOG_LEVEL: "INFO"
+              VIKUNJA_LOG_LEVEL: "DEBUG"
           frontend:
             image:
               repository: vikunja/frontend
