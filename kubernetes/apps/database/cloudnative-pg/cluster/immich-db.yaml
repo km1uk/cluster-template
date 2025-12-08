@@ -14,6 +14,13 @@ spec:
     storageClass: synology-csi-delete
   superuserSecret:
     name: postgres-superuser
+  bootstrap:
+    initdb:
+      postInitTemplateSQL:
+        - CREATE EXTENSION IF NOT EXISTS vector
+        - CREATE EXTENSION IF NOT EXISTS vchord CASCADE
+        - CREATE EXTENSION IF NOT EXISTS cube
+        - CREATE EXTENSION IF NOT EXISTS earthdistance CASCADE
   postgresql:
     parameters:
       timezone: "Europe/London"
