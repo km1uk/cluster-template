@@ -8,6 +8,8 @@ data:
   values.yaml: |
     crds:
       enabled: true
+      upgradeJob:
+        enabled: true
     cleanPrometheusOperatorObjectNames: true
     alertmanager:
       enabled: false
