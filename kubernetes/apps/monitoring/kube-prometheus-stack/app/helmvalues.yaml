@@ -86,15 +86,6 @@ data:
     kubeProxy:
       enabled: false # Disabled due to eBPF
     prometheus:
-      ingress:
-        enabled: true
-        ingressClassName: internal
-        pathType: Prefix
-        hosts:
-          - "prometheus.${SECRET_DOMAIN}"
-        tls:
-          - hosts:
-              - "prometheus.${SECRET_DOMAIN}"
       prometheusSpec:
         ruleSelectorNilUsesHelmValues: false
         serviceMonitorSelectorNilUsesHelmValues: false
