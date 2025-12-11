@@ -55,8 +55,8 @@ spec:
                 cpu: 100m
                 memory: 256M
               limits:
-                cpu: 500m
-                memory: 1G
+                cpu: 1000m
+                memory: 2G
     persistence:
       external:
         enabled: true
