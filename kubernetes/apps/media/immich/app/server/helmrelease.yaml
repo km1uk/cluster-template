@@ -29,7 +29,7 @@ spec:
   values:
     controllers:
       immich-server:
-        strategy: RollingUpdate
+        strategy: Recreate
         annotations:
           secret.reloader.stakater.com/reload: &secret immich-external-secret
         pod:
