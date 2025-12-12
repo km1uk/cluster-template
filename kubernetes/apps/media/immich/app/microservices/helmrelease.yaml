@@ -52,11 +52,11 @@ spec:
                   name: *secret
             resources:
               requests:
-                cpu: 100m
-                memory: 256M
+                cpu: 200m
+                memory: 512M
               limits:
                 cpu: 2000m
-                memory: 2G
+                memory: 4G
     persistence:
       external:
         enabled: true
