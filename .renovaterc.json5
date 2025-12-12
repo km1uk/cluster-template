@@ -27,6 +27,7 @@
   kustomize: {
     managerFilePatterns: ["/^kustomization\\.ya?ml(?:\\.j2)?$/"],
   },
+  platformAutomerge: true,
   packageRules: [
     {
       description: "Override Helmfile Dependency Name",
@@ -76,11 +77,13 @@
       matchUpdateTypes: ["patch"],
       semanticCommitType: "fix",
       commitMessageExtra: "( {{currentVersion}} ➔ {{newVersion}} )",
+      automerge: true,
     },
     {
       matchUpdateTypes: ["digest"],
       semanticCommitType: "chore",
       commitMessageExtra: "( {{currentDigestShort}} ➔ {{newDigestShort}} )",
+      automerge: true,
     },
     {
       matchDatasources: ["docker"],
