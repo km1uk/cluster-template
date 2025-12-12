@@ -54,6 +54,6 @@ spec:
       persistence:
         enabled: false
     metrics:
-      enabled: false
+      enabled: true
       serviceMonitor:
-        enabled: false
+        enabled: true
