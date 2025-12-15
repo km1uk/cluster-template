@@ -94,7 +94,6 @@ spec:
             env:
               FTLCONF_dns_listeningMode: all
               FTLCONF_dns_dnssec: 'false'
-              FTLCONF_dns_upstreams: 192.168.20.7;192.168.20.7
               FTLCONF_webserver_interface_boxed: false
               FTLCONF_webserver_interface_theme: default-auto
               FTLCONF_webserver_port: &pihole-port 80
@@ -163,14 +162,6 @@ spec:
               fsGroup: 1000
               fsGroupChangePolicy: OnRootMismatch
 
-      nas-exporter: # also setup exporter for nas' pihole instance
-        containers:
-          exporter:
-            <<: *exporter
-            env:
-              <<: *exporterEnv
-              PIHOLE_HOSTNAME: nas.servers.internal.
-
     service:
       app:
         forceRename: *app
@@ -204,19 +195,11 @@ spec:
             port: *exporter-port
             protocol: HTTP
 
-      nas-exporter:
-        controller: &nasExporter nas-exporter
-        ports:
-          prometheus:
-            port: *exporter-port
-            protocol: HTTP
-
     route:
       app:
-        hostnames:
-          - '{{ .Release.Name }}.tholinka.dev'
+        hostnames: ["{{ .Release.Name }}.${SECRET_DOMAIN}"]
         parentRefs:
-          - name: envoy-internal
+          - name: envoy-external
             namespace: network
         rules:
           - backendRefs: [{ identifier: app }]
@@ -242,16 +225,6 @@ spec:
           identifier: app
 
     persistence:
-      #tmpfs:
-      #  type: emptyDir
-      #  advancedMounts:
-      #    *app :
-      #      init:
-      #        - path: /final
-      #          subPath: config
-      #      *app :
-      #        - path: /etc/pihole
-      #          subPath: config
       config-map:
         type: configMap
         name: pihole-configmap
