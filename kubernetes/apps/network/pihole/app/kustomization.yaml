@@ -5,7 +5,7 @@ kind: Kustomization
 resources:
   - ./helmrelease.yaml
   - ./grafanadashboard.yaml
-  - ./externalsecret.yaml
+  - ./pihole-external-secret.yaml
 configMapGenerator:
   - name: pihole-configmap
     files:
