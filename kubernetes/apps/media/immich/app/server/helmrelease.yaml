@@ -28,6 +28,9 @@ spec:
     - name: synology-csi
       namespace: synology-csi
   values:
+    immich:
+      metrics:
+        enabled: true
     controllers:
       immich-server:
         strategy: Recreate
