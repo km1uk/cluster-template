@@ -9,3 +9,4 @@ resources:
   - ./cloudnative-pg/ks.yaml
   - ./pgadmin/ks.yaml
   - ./redis/ks.yaml
+  - ./nocodb/ks.yaml
