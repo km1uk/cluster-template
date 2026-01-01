@@ -80,7 +80,8 @@ spec:
         controller: *app
         ports:
           http:
-            port: &port 8080
+            #port: &port 8080
+            port: &port 3456
     route:
       app:
         hostnames: ["vikunja.${SECRET_DOMAIN}"]
