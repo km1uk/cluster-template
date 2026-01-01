@@ -52,7 +52,8 @@ spec:
         containers:
           app:
             image:
-              repository: vikunja/api
+              #repository: vikunja/api
+              repository: vikunja/vikunja
               #tag: 0.22.1
               tag: 0.23.0
               pullPolicy: IfNotPresent
@@ -65,15 +66,15 @@ spec:
               VIKUNJA_SERVICE_ENABLEREGISTRATION: "false"
               VIKUNJA_SERVICE_ENABLEUSERDELETION: "false"
               VIKUNJA_LOG_LEVEL: "DEBUG"
-          frontend:
-            image:
-              repository: vikunja/frontend
-              #tag: 0.22.1
-              tag: 0.23.0
-          proxy:
-            image:
-              repository: caddy
-              tag: 2.10.2-alpine
+          #frontend:
+          #  image:
+          #    repository: vikunja/frontend
+          #    #tag: 0.22.1
+          #    tag: 0.23.0
+          #proxy:
+          #  image:
+          #    repository: caddy
+          #    tag: 2.10.2-alpine
     service:
       app:
         controller: *app
@@ -92,12 +93,12 @@ spec:
               - identifier: app
                 port: *port
     persistence:
-      caddy-config:
-        type: configMap
-        name: vikunja-caddy-config
-        globalMounts:
-          - path: /etc/caddy/Caddyfile
-            subPath: Caddyfile
+      #caddy-config:
+      #  type: configMap
+      #  name: vikunja-caddy-config
+      #  globalMounts:
+      #    - path: /etc/caddy/Caddyfile
+      #      subPath: Caddyfile
       vikunja-config:
         type: secret
         name: vikunja-external-config
