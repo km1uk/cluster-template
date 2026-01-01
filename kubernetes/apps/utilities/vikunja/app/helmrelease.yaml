@@ -54,6 +54,7 @@ spec:
             image:
               repository: vikunja/api
               #tag: 0.22.1
+              tag: latest
               pullPolicy: IfNotPresent
             envFrom:
               - secretRef:
@@ -68,6 +69,7 @@ spec:
             image:
               repository: vikunja/frontend
               #tag: 0.22.1
+              tag: latest
           proxy:
             image:
               repository: caddy
