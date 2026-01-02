@@ -67,7 +67,7 @@ spec:
             port: &port 80
     route:
       app:
-        hostnames: ["{{ .Release.Name }}.${SECRET_DOMAIN}"]
+        hostnames: ["recipes.${SECRET_DOMAIN}"]
         parentRefs:
           - name: envoy-external
             namespace: network
