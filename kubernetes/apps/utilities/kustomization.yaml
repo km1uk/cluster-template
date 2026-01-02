@@ -10,3 +10,4 @@ resources:
   - ./vikunja/ks.yaml
   - ./outline/ks.yaml
   - ./grist/ks.yaml
+  - ./tandoor/ks.yaml
