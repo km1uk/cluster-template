@@ -64,7 +64,18 @@ spec:
       app:
         ports:
           http:
-            port: 80
+            port: &port 80
+    route:
+      app:
+        hostnames: ["{{ .Release.Name }}.${SECRET_DOMAIN}"]
+        parentRefs:
+          - name: envoy-external
+            namespace: network
+            sectionName: https
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: *port
     persistence:
       data:
         existingClaim: *app
