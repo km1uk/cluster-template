@@ -78,7 +78,12 @@ spec:
                 port: *port
     persistence:
       data:
-        existingClaim: *app
+        enabled: true
+        storageClass: synology-csi-retain
+        accessMode: ReadWriteOnce
+        type: persistentVolumeClaim
+        size: 10Gi
+        retain: true
         advancedMounts:
           tandoor:
             app:
