@@ -77,23 +77,14 @@ spec:
               - identifier: app
                 port: *port
     persistence:
-      config:
-        existingClaim: *app
-        advancedMounts:
-          tandoor:
-            app: &folders
-              - path: /opt/recipes/data
-                subPath: data
-              - path: /opt/recipes/mediafiles
-                subPath: mediafiles
-              - path: /opt/recipes/staticfiles
-                subPath: staticfiles
-            migrations: *folders
-      django-js-reverse:
+      static:
         type: emptyDir
         advancedMounts:
           tandoor:
+            collectstatic:
+              - path: /opt/recipes/staticfiles
             app:
-              - path: /opt/recipes/cookbook/static/django_js_reverse
-            migrations:
-              - path: /opt/recipes/cookbook/static/django_js_reverse
+              - path: /opt/recipes/staticfiles
+                readOnly: true
+      tmp:
+        type: emptyDir
