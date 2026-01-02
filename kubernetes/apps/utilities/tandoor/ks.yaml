@@ -12,8 +12,6 @@ spec:
   dependsOn:
     - name: cloudnative-pg-cluster
       namespace: database
-    - name: onepassword-connect
-      namespace: security
   path: ./kubernetes/apps/utilities/tandoor/app
   prune: true
   sourceRef:
