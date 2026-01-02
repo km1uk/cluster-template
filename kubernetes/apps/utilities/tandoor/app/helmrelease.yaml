@@ -77,26 +77,23 @@ spec:
               - identifier: app
                 port: *port
     persistence:
-      data:
-        enabled: true
-        storageClass: synology-csi-retain
-        accessMode: ReadWriteOnce
-        type: persistentVolumeClaim
-        size: 10Gi
-        retain: true
+      config:
+        existingClaim: *app
         advancedMounts:
           tandoor:
-            app:
+            app: &folders
+              - path: /opt/recipes/data
+                subPath: data
               - path: /opt/recipes/mediafiles
                 subPath: mediafiles
               - path: /opt/recipes/staticfiles
                 subPath: staticfiles
-      tmpfs:
+            migrations: *folders
+      django-js-reverse:
         type: emptyDir
         advancedMounts:
           tandoor:
             app:
               - path: /opt/recipes/cookbook/static/django_js_reverse
-                subPath: django_js_reverse
-              - path: /tmp
-                subPath: tmp
+            migrations:
+              - path: /opt/recipes/cookbook/static/django_js_reverse
