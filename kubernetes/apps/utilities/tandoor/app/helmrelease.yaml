@@ -79,12 +79,15 @@ spec:
     persistence:
       static:
         type: emptyDir
-        advancedMounts:
-          tandoor:
-            collectstatic:
-              - path: /opt/recipes/staticfiles
-            app:
-              - path: /opt/recipes/staticfiles
-                readOnly: true
+        globalMounts:
+          - path: /opt/recipes/staticfiles
+      media:
+        enabled: true
+        type: persistentVolumeClaim
+        storageClass: synology-csi-retain
+        accessMode: ReadWriteOnce
+        size: 5Gi
+        globalMounts:
+          - path: /opt/recipes/mediafiles
       tmp:
         type: emptyDir
