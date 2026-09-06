@@ -55,7 +55,7 @@ spec:
               #repository: vikunja/api
               repository: vikunja/vikunja
               #tag: 0.22.1
-              tag: 0.24.6
+              tag: 2.6.0
               pullPolicy: IfNotPresent
             envFrom:
               - secretRef:
