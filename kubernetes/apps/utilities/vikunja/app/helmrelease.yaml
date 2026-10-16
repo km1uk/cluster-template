@@ -34,7 +34,7 @@ spec:
           01-check-db-ready:
             image:
               repository: postgres
-              tag: 18.1
+              tag: 18.6
             envFrom:
               - secretRef:
                   name: vikunja-external-secret
